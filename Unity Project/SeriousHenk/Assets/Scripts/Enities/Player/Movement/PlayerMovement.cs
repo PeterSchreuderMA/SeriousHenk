@@ -11,12 +11,12 @@ public class PlayerMovement : MonoBehaviour
 {
     [SerializeField]
     private float moveSpeed = 6f, gravity = 20f;
-
-    [Header("Gets the Main Camera")]
-    [SerializeField]
+    
     private Transform cameraTransform;
 
-    CharacterController characterController;
+    private Rigidbody rigidbodyPlayer;
+
+    private bool isGrounded;
 
     private Vector3 moveDirection = Vector3.zero;
 
@@ -24,10 +24,9 @@ public class PlayerMovement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        CheckCharacterController();
-
         //Find the current camera
-        cameraTransform = GameObject.FindGameObjectWithTag("Main Camera").transform;
+        cameraTransform = GameObject.FindGameObjectWithTag("MainCamera").transform;
+        rigidbodyPlayer = GetComponent<Rigidbody>();
     }
 
     // Update is called once per frame
@@ -35,10 +34,9 @@ public class PlayerMovement : MonoBehaviour
     {
         
         //Check if the player is on the ground
-        if (characterController.isGrounded)
-        {
-            MoveDirection();
-        }
+        
+        MoveDirection();
+        
 
         
     }
@@ -49,19 +47,19 @@ public class PlayerMovement : MonoBehaviour
         moveDirection = cameraTransform.TransformDirection(moveDirection);
         moveDirection *= moveSpeed;
 
+
+        rigidbodyPlayer.AddForce(moveDirection, ForceMode.Impulse);
         //Move the player
-        characterController.Move(moveDirection * Time.deltaTime);
+        //characterController.Move(moveDirection * Time.deltaTime);
     }
 
-    void CheckCharacterController()
+    /*void CheckGrounded()
     {
-        //If there is no Controller detected, create one for now
-        if (GetComponent<CharacterController>() == null)
-        {
-            gameObject.AddComponent<CharacterController>();
-            Debug.LogWarning("No CharacterController detected! Added one for now.");
-        }
+        RaycastHit _hit;
+        Ray _ray = Physics.Raycast(transform.position, Vector3.down, 1f, 8, out _hit);
 
-        characterController = GetComponent<CharacterController>();
-    }
+
+        if ()
+
+    }*/
 }
